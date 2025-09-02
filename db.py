@@ -1,4 +1,3 @@
-import asyncio
 import aiosqlite
 import asyncpg
 import logging
@@ -6,7 +5,6 @@ from typing import Optional
 from urllib.parse import urlparse
 
 logger = logging.getLogger("db")
-
 
 SQLITE_SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (

@@ -17,7 +17,6 @@ def command_logger():
     def decorator(func: Callable[..., Coroutine[Any, Any, Any]]):
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            # Determine ctx whether function is a method or a free function
             ctx = None
             if args:
                 if isinstance(args[0], commands.Context):
@@ -88,10 +87,8 @@ def require_guild_permissions(**perms):
                 ctx = kwargs.get("ctx")
 
             if ctx is None:
-                # If we can't determine ctx, just call the function; let it error naturally.
                 return await func(*args, **kwargs)
 
-            # The check decorator returns a predicate; reuse it
             pred = check.predicate
             if not await commands.utils.maybe_coroutine(pred, ctx):
                 logger.warning("Permission denied for %s on %s", getattr(ctx, "author", "unknown"), func.__name__)

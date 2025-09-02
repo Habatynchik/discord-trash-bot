@@ -26,7 +26,6 @@ services:
       - .env
     environment:
       - PYTHONUNBUFFERED=1
-      - DATABASE_URL=postgresql://botuser:botpass@db:5432/botdb
     depends_on:
       db:
         condition: service_healthy

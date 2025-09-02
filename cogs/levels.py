@@ -11,7 +11,6 @@ logger = logging.getLogger("levels")
 
 
 def xp_to_level(xp: int) -> int:
-    # Simple quadratic curve: level n at xp = 50 * n^2
     return int(math.sqrt(xp / 50))
 
 
@@ -24,7 +23,6 @@ class LevelsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        # Ignore bot messages and DMs
         if message.author.bot or message.guild is None:
             return
 

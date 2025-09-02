@@ -68,10 +68,7 @@ async def main():
 
     # Initialize database and add cogs
     database_url = get_env("DATABASE_URL")
-    if database_url:
-        db = Database(url=database_url)
-    else:
-        db = Database(path=get_env("DATABASE_PATH", "bot.db"))
+    db = Database(url=database_url)
     await db.init()
 
     await bot.add_cog(ModerationCog(bot))
