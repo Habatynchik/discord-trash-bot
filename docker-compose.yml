@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=botdb
+      - POSTGRES_USER=botuser
+      - POSTGRES_PASSWORD=botpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  bot:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: ["/bin/sh", "-c", "pip install -r requirements.txt && python main.py"]
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql://botuser:botpass@db:5432/botdb
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:
